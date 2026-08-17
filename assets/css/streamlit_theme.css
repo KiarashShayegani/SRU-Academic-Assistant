@@ -1,0 +1,288 @@
+/* ============================================================
+   sru-academic-assistant – Streamlit theme (RTL / Vazirmatn)
+   Loaded via st.markdown(..., unsafe_allow_html=True)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap');
+
+* {
+    font-family: 'Vazirmatn', sans-serif;
+    direction: rtl;
+}
+
+html,
+body,
+.stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stApp"],
+main {
+    background: linear-gradient(135deg, #eef7fb 0%, #d7ecf4 100%) !important;
+}
+
+header {
+    visibility: hidden;
+    height: 0;
+}
+
+[data-testid="stToolbar"],
+#MainMenu,
+footer {
+    display: none;
+}
+
+[data-testid="stMainBlockContainer"] {
+    max-width: 1200px !important;
+    padding-top: 1rem !important;
+    padding-bottom: 3rem !important;
+}
+
+/* ----- Hero ----- */
+.hero-card {
+    background: white;
+    border-radius: 28px;
+    padding: 18px 24px;
+    margin-bottom: 25px;
+    text-align: center;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
+}
+
+.hero-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1a7aa8, #3aa6d8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+    color: #425d6e;
+    font-weight: 500;
+}
+
+/* ----- Buttons ----- */
+.stButton button {
+    border-radius: 999px !important;
+    background: white !important;
+    color: #25506a !important;
+    font-weight: 600 !important;
+}
+
+.stButton button:hover {
+    transform: translateY(-2px);
+    background: #2b9cd1 !important;
+    color: white !important;
+}
+
+/* ----- Source / meta cards ----- */
+.source-card {
+    background: #edf8fc;
+    border-right: 4px solid #2b9cd1;
+    border-radius: 14px;
+    padding: 10px 15px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #456372;
+}
+
+/* ----- Hide sidebar ----- */
+[data-testid="stSidebar"],
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+
+/* ----- Bottom / chat input glass ----- */
+[data-testid="stBottom"],
+[data-testid="stBottom"] > div,
+[data-testid="stBottomBlockContainer"] {
+    background: transparent !important;
+}
+
+[data-testid="stBottom"] {
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    background: rgba(238, 247, 251, 0.45) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.30) !important;
+}
+
+[data-testid="stBottomBlockContainer"] {
+    max-width: 1000px !important;
+    margin: auto !important;
+    padding-bottom: 15px !important;
+}
+
+/* ----- Chat input ----- */
+[data-testid="stChatInput"] textarea,
+[data-testid="stChatInput"] input {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #1f4258 !important;
+    font-family: 'Vazirmatn', sans-serif !important;
+    font-size: 15px !important;
+    border-radius: 28px !important;
+    border: 1px solid #d0e1eb !important;
+    min-height: 44px !important;
+    height: 44px !important;
+}
+
+[data-testid="stChatInput"] textarea::placeholder,
+[data-testid="stChatInput"] input::placeholder {
+    color: #6b8293 !important;
+    font-family: 'Vazirmatn', sans-serif !important;
+    opacity: 1 !important;
+}
+
+[data-testid="stChatInput"],
+[data-testid="stChatInput"] > div {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+[data-testid="stChatInput"] button {
+    background: linear-gradient(135deg, #2b9cd1, #1a7aa8) !important;
+    color: white !important;
+    border: none !important;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 50% !important;
+    transition: all 0.2s ease !important;
+    margin-bottom: 2px !important;
+}
+
+[data-testid="stChatInput"] button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 18px rgba(43, 156, 209, 0.35) !important;
+}
+
+[data-testid="stChatInputTextArea"] {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    padding-right: 18px !important;
+    padding-left: 18px !important;
+    line-height: 1.4 !important;
+    text-align: right !important;
+    direction: rtl !important;
+}
+
+[data-testid="stChatInput"] textarea:focus {
+    border: 1px solid #2b9cd1 !important;
+    background: white !important;
+}
+
+[data-baseweb="textarea"],
+[data-baseweb="base-input"] {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* ----- Chat messages ----- */
+[data-testid="stChatMessageAvatarUser"],
+[data-testid="stChatMessageAvatarAssistant"] {
+    display: none !important;
+}
+
+[data-testid="stChatMessage"] {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin-bottom: 14px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+[aria-label="Chat message from user"] {
+    background: linear-gradient(135deg, #2b9cd1, #1a7aa8) !important;
+    color: white !important;
+    border-radius: 22px !important;
+    padding: 14px 18px !important;
+    width: fit-content !important;
+    max-width: 75% !important;
+    min-width: 80px !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    text-align: right !important;
+    direction: rtl !important;
+    box-shadow: 0 3px 12px rgba(43, 156, 209, 0.25);
+    display: inline-block !important;
+    white-space: normal !important;
+}
+
+[aria-label="Chat message from assistant"] {
+    background: white !important;
+    color: #24445a !important;
+    border-radius: 22px !important;
+    padding: 14px 18px !important;
+    width: fit-content !important;
+    max-width: 75% !important;
+    min-width: 80px !important;
+    margin-right: auto !important;
+    margin-left: 0 !important;
+    text-align: right !important;
+    direction: rtl !important;
+    border: 1px solid #dce9f1 !important;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    display: inline-block !important;
+    white-space: normal !important;
+}
+
+[data-testid="stChatMessageContent"] {
+    width: auto !important;
+    flex: unset !important;
+}
+
+[data-testid="stMarkdownContainer"],
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li,
+[data-testid="stMarkdownContainer"] ol,
+[data-testid="stMarkdownContainer"] ul {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* ----- Radio / category pills ----- */
+div[role="radiogroup"] {
+    justify-content: center !important;
+    gap: 12px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    row-gap: 10px !important;
+    max-width: 100% !important;
+}
+
+div[role="radiogroup"] label {
+    background: white !important;
+    border: 1px solid #d8e7ef !important;
+    border-radius: 999px !important;
+    padding: 9px 16px !important;
+    color: #25506a !important;
+    font-weight: 600 !important;
+    font-size: 13.5px !important;
+    white-space: nowrap !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+div[role="radiogroup"] label:hover {
+    border-color: #2b9cd1 !important;
+    transform: translateY(-1px);
+}
+
+div[role="radiogroup"] label:has(input:checked) {
+    background: linear-gradient(135deg, #2b9cd1, #1a7aa8) !important;
+    color: white !important;
+    border-color: transparent !important;
+    box-shadow: 0 6px 18px rgba(43, 156, 209, 0.35);
+}
+
+div[role="radiogroup"] label:has(input:checked) p {
+    color: white !important;
+}
+
+div[role="radiogroup"] label p {
+    color: #25506a !important;
+    margin: 0 !important;
+}
+
+div[role="radiogroup"] input[type="radio"] {
+    display: none !important;
+}

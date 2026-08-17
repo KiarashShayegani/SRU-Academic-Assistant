@@ -1,0 +1,101 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sru-academic-assistant"
+version = "0.1.0"
+description = "FAQ + RAG academic assistant for Shahid Rajaee Teacher Training University (SRU) educational regulations"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Kiarash Shayegani", email = "kiarash.shayegani.st@gmail.com" }
+]
+keywords = [
+    "rag",
+    "faq",
+    "persian-nlp",
+    "education",
+    "lancedb",
+    "sentence-transformers",
+    "streamlit",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Education",
+]
+
+dependencies = [
+    "sentence-transformers>=2.7.0,<4.0.0",
+    "lancedb>=0.6.0",
+    "pyarrow>=14.0.0",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "openai>=1.30.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "pyyaml>=6.0",
+    "streamlit>=1.32.0",
+    "requests>=2.31.0",
+    "torch",  # required by sentence-transformers; pin only if you need reproducibility
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.3.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+]
+pdf = [
+    "PyPDF2>=3.0.0",
+]
+eval = [
+    "scikit-learn>=1.4.0",
+    "matplotlib>=3.8.0",
+]
+
+# Console scripts: only package modules are installed as entry points.
+# Index-build CLIs live under scripts/ and are run as:
+#   python scripts/build_regulation_index.py ...
+#   python scripts/build_faq_index.py ...
+[project.scripts]
+sru-app = "sru_assistant.ui.streamlit_app:main"
+
+[project.urls]
+Homepage = "https://github.com/KiarashShayegani/sru-academic-assistant"
+Repository = "https://github.com/KiarashShayegani/sru-academic-assistant"
+Issues = "https://github.com/KiarashShayegani/sru-academic-assistant/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+sru_assistant = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = false
+ignore_missing_imports = true

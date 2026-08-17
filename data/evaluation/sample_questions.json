@@ -1,0 +1,53 @@
+{
+  "description": "Golden set for offline retrieval evaluation. Expand over time.",
+  "questions": [
+    {
+      "question": "حداقل نمره قبولی در یک درس چند است؟",
+      "expected_keywords": ["۱۰", "10", "نمره قبولی", "میانگین", "۱۲"],
+      "expected_pages": [22],
+      "notes": "Passing grade 10/20, semester average 12"
+    },
+    {
+      "question": "حداکثر واحد قابل اخذ در هر نیمسال چقدر است؟",
+      "expected_keywords": ["۲۰", "20", "واحد", "نیمسال", "تابستان"],
+      "expected_pages": [25],
+      "notes": "Max 20 units per semester, 6 in summer"
+    },
+    {
+      "question": "چند نیمسال مشروطی باعث اخراج می‌شود؟",
+      "expected_keywords": ["سه نیمسال", "مشروط", "محروم", "کارشناسی پیوسته"],
+      "expected_pages": [22],
+      "notes": "3 probation semesters in continuous bachelor"
+    },
+    {
+      "question": "شرایط مرخصی تحصیلی چیست؟",
+      "expected_keywords": ["مرخصی", "سنوات", "احتساب", "نیمسال"],
+      "expected_pages": [15, 34, 35],
+      "notes": "Leave with/without counting toward years"
+    },
+    {
+      "question": "چگونه می‌توانم درخواست فارغ‌التحصیلی بدهم؟",
+      "expected_keywords": ["فارغ‌التحصیلی", "سامانه", "پیش‌خوان", "درخواست"],
+      "expected_pages": [42, 43],
+      "notes": "Graduation request path in Golestan"
+    },
+    {
+      "question": "مهلت اعتراض به نمره چقدر است؟",
+      "expected_keywords": ["۴۸", "48", "اعتراض", "ساعت"],
+      "expected_pages": [14],
+      "notes": "48 hours default grade appeal window"
+    },
+    {
+      "question": "دانشجوی ممتاز چند واحد می‌تواند اخذ کند؟",
+      "expected_keywords": ["۱۷", "24", "ممتاز", "واحد"],
+      "expected_pages": [25],
+      "notes": "GPA >= 17 can take up to 24 units"
+    },
+    {
+      "question": "آدرس سایت دانشگاه چیست؟",
+      "expected_keywords": ["sru.ac.ir", "portal.sru.ac.ir"],
+      "expected_pages": [5, 6],
+      "notes": "Official portals"
+    }
+  ]
+}

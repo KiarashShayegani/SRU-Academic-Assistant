@@ -1,0 +1,56 @@
+# Default configuration for sru-academic-assistant
+# Override via environment variables or a local.yaml (gitignored).
+
+project:
+  name: sru-academic-assistant
+  version: "0.1.0"
+
+paths:
+  # Relative to project root unless absolute
+  model_path: "models/MiniLM"          # SentenceTransformer model directory
+  db_path: "db/lancedb"                # LanceDB root
+  data_raw: "data/raw"
+  data_processed: "data/processed"
+  evaluation: "data/evaluation"
+
+tables:
+  regulation: "university_regulation_v2"
+  faq: "QA_v2"
+
+embedding:
+  dimension: 384
+  normalize: true
+  batch_size: 32
+  max_seq_length: 128                  # MiniLM limit – keep chunks conservative
+
+chunking:
+  # For regulation text with (صفحه N) markers
+  max_chars_per_page: 850
+  chunk_size: 750
+  overlap: 100
+  min_chunk_chars: 50
+
+retrieval:
+  regulation_k: 5
+  faq_k: 1
+  # Cosine distance → similarity = 1 - distance
+  # FAQ answers are returned for the nearest neighbour; score is display-only
+  # unless you re-enable a threshold in the pipeline.
+  faq_similarity_threshold: 0.0
+
+llm:
+  provider: "agnes"                    # agnes | groq | openai | ollama
+  temperature: 0.7
+  max_tokens: 1024
+  stream: true
+
+ui:
+  page_title: "دستیار آیین‌نامه دانشگاه شهید رجایی"
+  page_icon: "🎓"
+  default_mode: "faq"                  # faq | rag
+  show_sources: true
+  show_timing: true
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
