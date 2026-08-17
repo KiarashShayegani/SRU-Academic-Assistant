@@ -2,7 +2,7 @@
 
 **دستیار هوشمند آیین‌نامه دانشگاه تربیت دبیر شهید رجایی**
 
-A bilingual-capable (UI in Persian) **FAQ + RAG** academic assistant that answers junior students’ questions about educational regulations at *Shahid Rajaee Teacher Training University* (SRU).
+A **FAQ + RAG** academic assistant that answers junior students’ questions about educational regulations at *Shahid Rajaee Teacher Training University* (SRU).
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
