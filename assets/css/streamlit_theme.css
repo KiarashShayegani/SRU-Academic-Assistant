@@ -38,25 +38,37 @@ footer {
 
 /* ----- Hero ----- */
 .hero-card {
-    background: white;
-    border-radius: 28px;
-    padding: 18px 24px;
-    margin-bottom: 25px;
-    text-align: center;
-    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
+    background: white !important;
+    border-radius: 28px !important;
+    padding: 18px 24px !important;
+    margin-bottom: 25px !important;
+    text-align: center !important;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08) !important;
+    color: #24445a !important;
 }
 
 .hero-title {
-    font-size: 2.4rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #1a7aa8, #3aa6d8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 2.4rem !important;
+    font-weight: 700 !important;
+    background: linear-gradient(135deg, #1a7aa8, #3aa6d8) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: #1a7aa8 !important; /* fallback if clip unsupported */
+    margin: 0 !important;
 }
 
 .hero-subtitle {
-    color: #425d6e;
-    font-weight: 500;
+    color: #425d6e !important;
+    font-weight: 500 !important;
+    margin-top: 6px !important;
+}
+
+/* Hide Streamlit's default status / cache spinner overlays */
+[data-testid="stStatusWidget"],
+div[data-testid="stSpinner"],
+.stSpinner {
+    display: none !important;
 }
 
 /* ----- Buttons ----- */

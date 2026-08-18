@@ -8,8 +8,10 @@ from pathlib import Path
 
 import streamlit as st
 
-from sru_assistant.config import get_settings
-from sru_assistant.pipeline.answer import answer_question
+# IMPORTANT: do NOT import sentence_transformers / torch / pipeline at module level.
+# On Windows, Streamlit's file watcher + PyTorch GIL often crashes with:
+#   Fatal Python error: take_gil: PyCOND_WAIT(gil->cond) failed
+# Heavy deps are loaded lazily via st.cache_resource on first question.
 
 
 def _project_root() -> Path:
@@ -25,6 +27,43 @@ def load_css() -> str:
     if css_path.exists():
         return css_path.read_text(encoding="utf-8")
     return ""
+
+
+@st.cache_resource(show_spinner=False)
+def get_pipeline_deps():
+    """Load embedding model + retrievers once per process (cached by Streamlit).
+
+    show_spinner=False avoids Streamlit's default dark spinner overlay that
+    fights our custom CSS. The chat area shows our own thinking message instead.
+    """
+    import os
+
+    os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+    os.environ.setdefault("OMP_NUM_THREADS", "1")
+    os.environ.setdefault("MKL_NUM_THREADS", "1")
+
+    from sru_assistant.embeddings.model import EmbeddingModel
+    from sru_assistant.retrieval.faq_retriever import FAQRetriever
+    from sru_assistant.retrieval.regulation_retriever import RegulationRetriever
+    from sru_assistant.vectorstore.lancedb_store import LanceDBStore
+
+    embedder = EmbeddingModel()
+    store = LanceDBStore()
+    faq = FAQRetriever(store=store, embedder=embedder)
+    reg = RegulationRetriever(store=store, embedder=embedder)
+    return embedder, store, faq, reg
+
+
+def _answer(prompt: str, mode: str):
+    from sru_assistant.pipeline.answer import answer_question
+
+    _, _, faq, reg = get_pipeline_deps()
+    return answer_question(
+        prompt,
+        mode=mode,  # type: ignore[arg-type]
+        faq_retriever=faq,
+        regulation_retriever=reg,
+    )
 
 
 # Categorised quick questions (from the mature v4 app)
@@ -110,8 +149,14 @@ def _init_session() -> None:
     if "faq_question" not in st.session_state:
         st.session_state.faq_question = ""
     if "use_rag" not in st.session_state:
-        settings = get_settings()
-        st.session_state.use_rag = settings.default_mode == "rag"
+        # Avoid importing full config chain if possible; default FAQ
+        st.session_state.use_rag = False
+        try:
+            from sru_assistant.config import get_settings
+
+            st.session_state.use_rag = get_settings().default_mode == "rag"
+        except Exception:
+            st.session_state.use_rag = False
 
 
 def _log_feedback(kind: str, question: str, preview: str) -> None:
@@ -126,20 +171,24 @@ def _log_feedback(kind: str, question: str, preview: str) -> None:
 
 
 def main() -> None:
-    settings = get_settings()
     st.set_page_config(
-        page_title=settings.page_title,
-        page_icon=settings.page_icon,
+        page_title="دستیار آیین‌نامه دانشگاه شهید رجایی",
+        page_icon="🎓",
         layout="centered",
         initial_sidebar_state="collapsed",
     )
 
+    # Inject CSS and hero separately. Combining a large <style> block with HTML
+    # in one st.markdown can make newer Streamlit versions escape the HTML and
+    # show raw tags in a dark box.
     css = load_css()
+    if css:
+        st.markdown(f"<style>\n{css}\n</style>", unsafe_allow_html=True)
+
     st.markdown(
-        f"<style>{css}</style>"
-        f"""
+        """
         <div class="hero-card">
-            <div class="hero-title">{settings.page_title}</div>
+            <div class="hero-title">دستیار آیین‌نامه دانشگاه شهید رجایی</div>
             <div class="hero-subtitle">پاسخگویی هوشمند بر اساس آیین‌نامه‌های آموزشی دانشگاه</div>
         </div>
         """,
@@ -147,6 +196,17 @@ def main() -> None:
     )
 
     _init_session()
+
+    show_sources = True
+    show_timing = True
+    try:
+        from sru_assistant.config import get_settings
+
+        s = get_settings()
+        show_sources = s.show_sources
+        show_timing = s.show_timing
+    except Exception:
+        pass
 
     # ---- Mode selector ----
     st.markdown(
@@ -243,11 +303,18 @@ def main() -> None:
             st.markdown(prompt)
 
         with st.chat_message("assistant"):
+            # Custom status only (no Streamlit default spinner overlay)
             thinking = st.empty()
             if mode == "rag":
-                thinking.info("🧠 در حال تولید پاسخ هوشمند...")
+                thinking.markdown(
+                    '<div class="source-card">🧠 در حال تولید پاسخ هوشمند...</div>',
+                    unsafe_allow_html=True,
+                )
             else:
-                thinking.info("🔎 در حال بررسی پایگاه سوالات...")
+                thinking.markdown(
+                    '<div class="source-card">🔎 در حال بررسی پایگاه سوالات...</div>',
+                    unsafe_allow_html=True,
+                )
 
             message_box = st.empty()
             full_response = ""
@@ -255,26 +322,33 @@ def main() -> None:
 
             try:
                 start = time.time()
-                result = answer_question(prompt, mode=mode)
-                thinking.empty()
+                result = _answer(prompt, mode=mode)
 
                 if result.is_streaming() and result.stream is not None:
+                    # Keep "thinking" visible until the first token arrives,
+                    # then stream into the assistant bubble (same as old app).
+                    first_token = True
                     for token in result.stream:
+                        if first_token:
+                            thinking.empty()
+                            first_token = False
                         full_response += token
                         message_box.markdown(full_response + "▌")
                         time.sleep(0.015)
+                    thinking.empty()
                     message_box.markdown(full_response)
                 else:
+                    thinking.empty()
                     full_response = result.answer or ""
                     message_box.markdown(full_response)
 
                 source_label = result.source_label
-                if settings.show_sources and source_label:
+                if show_sources and source_label:
                     st.markdown(
                         f'<div class="source-card">{source_label}</div>',
                         unsafe_allow_html=True,
                     )
-                if settings.show_timing:
+                if show_timing:
                     elapsed = time.time() - start
                     st.markdown(
                         f'<div class="source-card">⏱️ {elapsed:.1f} ثانیه</div>',
